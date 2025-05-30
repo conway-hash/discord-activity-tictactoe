@@ -52,6 +52,15 @@ function broadcastUserList() {
   });
 }
 
+function broadcastClick(action) {
+  const message = JSON.stringify({ type: "click", action: action });
+  wss.clients.forEach(client => {
+    if (client.readyState === client.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
 wss.on("connection", (ws) => {
   console.log("Client connected");
 
@@ -69,9 +78,19 @@ wss.on("connection", (ws) => {
         connectedUsers.set(msg.user.id, msg.user.username);
         ws.userId = msg.user.id; // store userId on ws connection
         console.log(`User joined: ${msg.user.username} (${msg.user.id})`);
+        broadcastUserList();
       }
 
-      broadcastUserList();
+      if (msg.type === "minus_click") {
+        console.log(`User clicked: ${msg.user.username} (${msg.user.id})`);
+        broadcastClick("minus");
+      }
+
+      if (msg.type === "plus_click") {
+        console.log(`User clicked: ${msg.user.username} (${msg.user.id})`);
+        broadcastClick("plus");
+      }
+
     } catch (err) {
       console.error("Failed to parse message", err);
     }

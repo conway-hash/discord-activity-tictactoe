@@ -6,8 +6,8 @@ const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
 setupDiscordSdk().then(() => {
   console.log("Discord SDK is authenticated");
 
-  appendVoiceChannelName();
-  appendGuildAvatar();
+  // appendVoiceChannelName();
+  // appendGuildAvatar();
   setupWebSocket();
 });
 
@@ -56,7 +56,14 @@ async function setupDiscordSdk() {
 document.querySelector('#app').innerHTML = `
   <div>
     <h1>Hello Friends!</h1>
-    <ul id="userList"></ul>
+    <div class="card">
+      <div class="card-header">
+        <button id="plus_clicker">+</button>
+        <p id="clickCount">0</p>
+        <button id="minus_clicker">-</button>
+      </div>
+      <ul id="userList"></ul>
+    </div>
   </div>
 `;
 
@@ -115,6 +122,26 @@ async function appendGuildAvatar() {
 function setupWebSocket() {
   const socket = new WebSocket("/.proxy/api/ws");
 
+  document.getElementById("plus_clicker")?.addEventListener("click", () => {
+    socket.send(JSON.stringify({
+      type: "plus_click",
+      user: {
+        username: auth.user.username,
+        id: auth.user.id,
+      },
+    }));
+  });
+
+  document.getElementById("minus_clicker")?.addEventListener("click", () => {
+    socket.send(JSON.stringify({
+      type: "minus_click",
+      user: {
+        username: auth.user.username,
+        id: auth.user.id,
+      },
+    }));
+  });
+
   socket.onopen = () => {
     console.log("✅ WebSocket connected");
     socket.send(JSON.stringify({
@@ -143,7 +170,18 @@ function setupWebSocket() {
         li.textContent = user.username;
         userListElement.appendChild(li);
       });
-    } else {
+    } else if (msg.type === "click") {
+      const clickCountElement = document.getElementById("clickCount");
+      if (clickCountElement) {
+        const currentCount = parseInt(clickCountElement.textContent, 10);
+        if (msg.action === "minus") {
+          clickCountElement.textContent = currentCount - 1;
+        } else {
+          clickCountElement.textContent = currentCount + 1;
+        }
+      }
+    } 
+    else {
       console.log("Message from server:", msg);
     }
   };
