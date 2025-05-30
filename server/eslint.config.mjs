@@ -40,6 +40,11 @@ export default defineConfig([
     },
   },
 
+
+
+
+
+  
   // Add TypeScript ESLint recommended rules
   tseslint.configs.recommended,
 ]);

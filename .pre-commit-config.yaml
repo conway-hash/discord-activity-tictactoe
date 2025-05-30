@@ -6,28 +6,28 @@ repos:
         entry: npx eslint --max-warnings=0
         language: system
         files: ^client/
-        types: [javascript, jsx, ts, tsx]
+        types: [javascript, jsx, ts, tsx, json]
 
       - id: eslint-server
         name: ESLint (server)
         entry: npx eslint --max-warnings=0
         language: system
         files: ^server/
-        types: [javascript, jsx, ts, tsx]
+        types: [javascript, jsx, ts, tsx, json]
 
       - id: prettier-client
         name: Prettier Check (client)
         entry: npx prettier --check
         language: system
         files: ^client/
-        types: [javascript, jsx, ts, tsx]
+        types: [javascript, jsx, ts, tsx, json]
 
       - id: prettier-server
         name: Prettier Check (server)
         entry: npx prettier --check
         language: system
         files: ^server/
-        types: [javascript, jsx, ts, tsx]
+        types: [javascript, jsx, ts, tsx, json]
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v2.1.1
