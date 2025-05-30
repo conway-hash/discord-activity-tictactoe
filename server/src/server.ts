@@ -42,18 +42,6 @@ const connectedUsers = new Map<WebSocket, User>();
 const server = http.createServer(app);
 const wss = new WebSocketServer({
   server,
-
-
-
-s
-asdasd
-ssdas
-sssssss
-sss
-s
-
-
-  sdaasdasdsaasdasdasdsa
   path: '/api/ws',
 });
 
