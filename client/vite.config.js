@@ -1,19 +1,24 @@
-import {defineConfig} from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  envDir: '../',
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '../');
+
+  return {
+    envDir: '../',
+    server: {
+      port: 3000,
+      allowedHosts: [env.VITE_ALLOWED_HOST],
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+          secure: false,
+          ws: true,
+        },
+      },
+      hmr: {
+        clientPort: 443,
       },
     },
-    hmr: {
-      clientPort: 443,
-    },
-  },
+  };
 });
