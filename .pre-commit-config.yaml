@@ -1,10 +1,4 @@
 repos:
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v2.1.1
-    hooks:
-      - id: conventional-pre-commit
-        stages: [commit-msg]
-
   - repo: local
     hooks:
       - id: eslint-client
@@ -34,4 +28,10 @@ repos:
         language: system
         files: ^server/.*\.(js|jsx|ts|tsx|json|yaml|yml|md)$
         pass_filenames: true
-        
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.1.1
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
