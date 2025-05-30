@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [] # Optional: [feat, fix, ci, chore, test]
+        args: []  # Optional: restrict commit types like [feat, fix, chore]
 
   - repo: local
     hooks:
@@ -26,5 +26,5 @@ repos:
         name: Prettier Check
         entry: npx prettier --check
         language: system
-        files: \.(js|jsx|ts|tsx|json|yaml|yml|md)$
+        files: ^.*\.(js|jsx|ts|tsx|json|yaml|yml|md)$
         pass_filenames: true
