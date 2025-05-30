@@ -13,18 +13,18 @@ repos:
         entry: npx eslint --max-warnings=0
         language: system
         files: ^client/.*\.(js|jsx|ts|tsx)$
-        pass_filenames: true
+        pass_filenames: false
 
       - id: eslint-server
         name: ESLint (server)
         entry: npx eslint --max-warnings=0
         language: system
         files: ^server/.*\.(js|jsx|ts|tsx)$
-        pass_filenames: true
+        pass_filenames: false
 
       - id: prettier
         name: Prettier Check
         entry: npx prettier --check
         language: system
         files: ^.*\.(js|jsx|ts|tsx|json|yaml|yml|md)$
-        pass_filenames: true
+        pass_filenames: false
