@@ -3,28 +3,28 @@ repos:
     hooks:
       - id: eslint-client
         name: ESLint (client)
-        entry: powershell -Command "Set-Location client; npx eslint --max-warnings=0"
+        entry: powershell -Command "Set-Location client; npx eslint --max-warnings=0 $($args -join ' ')"
         language: system
         files: client/.*\.(js|jsx|ts|tsx)$
         pass_filenames: true
 
       - id: eslint-server
         name: ESLint (server)
-        entry: powershell -Command "Set-Location server; npx eslint --max-warnings=0"
+        entry: powershell -Command "Set-Location server; npx eslint --max-warnings=0 $($args -join ' ')"
         language: system
         files: server/.*\.(js|jsx|ts|tsx)$
         pass_filenames: true
 
       - id: prettier-client
         name: Prettier Check (client)
-        entry: powershell -Command "Set-Location client; npx prettier --check"
+        entry: powershell -Command "Set-Location client; npx prettier --check $($args -join ' ')"
         language: system
         files: client/.*\.(js|jsx|ts|tsx|json|yaml|yml|md)$
         pass_filenames: true
 
       - id: prettier-server
         name: Prettier Check (server)
-        entry: powershell -Command "Set-Location server; npx prettier --check"
+        entry: powershell -Command "Set-Location server; npx prettier --check $($args -join ' ')"
         language: system
         files: server/.*\.(js|jsx|ts|tsx|json|yaml|yml|md)$
         pass_filenames: true
