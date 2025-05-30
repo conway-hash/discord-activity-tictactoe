@@ -4,5 +4,27 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [] # optional: list of Conventional Commits types to allow e.g. [feat, fix, ci, chore, test]
+        args: [] # Optional: [feat, fix, ci, chore, test]
 
+  - repo: local
+    hooks:
+      - id: eslint-client
+        name: ESLint (client)
+        entry: npx eslint --max-warnings=0
+        language: system
+        files: ^client/.*\.(js|jsx|ts|tsx)$
+        pass_filenames: true
+
+      - id: eslint-server
+        name: ESLint (server)
+        entry: npx eslint --max-warnings=0
+        language: system
+        files: ^server/.*\.(js|jsx|ts|tsx)$
+        pass_filenames: true
+
+      - id: prettier
+        name: Prettier Check
+        entry: npx prettier --check
+        language: system
+        files: \.(js|jsx|ts|tsx|json|yaml|yml|md)$
+        pass_filenames: true

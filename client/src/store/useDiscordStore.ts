@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { DiscordSDK } from '@discord/embedded-app-sdk';
+import { AuthenticateResponse } from '../../../shared/types';
 
 interface DiscordState {
   discordSdk: DiscordSDK | null;
-  auth: any;
+  auth: AuthenticateResponse | null;
   initDiscord: () => Promise<void>;
 }
 

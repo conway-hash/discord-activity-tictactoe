@@ -22,15 +22,17 @@ export const useWebSocketStore = create<WebSocketState>((set) => ({
     const socket = new WebSocket('/.proxy/api/ws');
 
     socket.onopen = () => {
-      console.log("✅ WebSocket connected");
-      socket.send(JSON.stringify({
-        type: 'join',
-        user: {
-          id: auth.user.id,
-          username: auth.user.username,
-          avatar: auth.user.avatar,
-        },
-      }));
+      console.log('✅ WebSocket connected');
+      socket.send(
+        JSON.stringify({
+          type: 'join',
+          user: {
+            id: auth.user.id,
+            username: auth.user.username,
+            avatar: auth.user.avatar,
+          },
+        }),
+      );
     };
 
     socket.onmessage = (e) => {
@@ -43,12 +45,12 @@ export const useWebSocketStore = create<WebSocketState>((set) => ({
     };
 
     socket.onclose = () => {
-      console.log("❌ WebSocket disconnected");
+      console.log('❌ WebSocket disconnected');
       set({ socket: null });
     };
 
     socket.onerror = (err) => {
-      console.error("⚠️ WebSocket error", err);
+      console.error('⚠️ WebSocket error', err);
     };
 
     set({ socket });

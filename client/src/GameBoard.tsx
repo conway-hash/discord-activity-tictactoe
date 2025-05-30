@@ -1,4 +1,4 @@
-import SpectatorList from "./components/SpectatorList";
+import SpectatorList from './components/SpectatorList';
 
 function GameBoard() {
   return (

@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts",
+    "lint": "eslint --max-warnings=0 .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "keywords": [],
   "author": "",
@@ -15,10 +19,22 @@
     "ws": "^8.18.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.27.0",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.28",
     "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "ts-node": "^10.9.2"
+    "typescript-eslint": "^8.33.0"
   }
 }
