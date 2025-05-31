@@ -7,13 +7,14 @@ interface User {
 
 type ServerToClientMessage =
   | { type: "info"; message: string }
-  | { type: "responseState"; users: User[]; playerOne: User | null; playerTwo: User | null };
+  | { type: "responseState"; users: User[]; playerOne: User | null; playerTwo: User | null; board: string[]; gameState: GameState };
 
 type ClientToServerMessage =
   | { type: "requestConnect"; user: User }
-  | { type: "requestPlayerUpdate" };
+  | { type: "requestPlayerUpdate" }
+  | { type: "requestBoardUpdate"; index: number };
 
-type GameState = "waiting" | "playing" | "finished";
+type GameState = "waiting" | "playing" | "draw" | "finished";
 
 type AuthenticateResponse = {
         access_token: string;

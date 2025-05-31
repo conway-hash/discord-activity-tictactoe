@@ -3,8 +3,8 @@ import { useDiscordStore } from './useDiscordStore';
 import {
   ServerToClientMessage,
   User,
-  GameState,
   ClientToServerMessage,
+  GameState,
 } from '../../../shared/types';
 
 interface WebSocketState {
@@ -12,10 +12,12 @@ interface WebSocketState {
   spectators: User[];
   playerOne: User | null;
   playerTwo: User | null;
+  board: string[];
   gameState: GameState;
 
   connectSocket: () => void;
   requestPlayerUpdate: () => void;
+  requestBoardUpdate: (idx: number) => void;
 }
 
 export const useWebSocketStore = create<WebSocketState>((set) => ({
@@ -24,6 +26,7 @@ export const useWebSocketStore = create<WebSocketState>((set) => ({
   playerOne: null,
   playerTwo: null,
   gameState: 'waiting',
+  board: ['', '', '', '', '', '', '', '', ''],
 
   connectSocket: () => {
     const { auth } = useDiscordStore.getState();
@@ -57,6 +60,8 @@ export const useWebSocketStore = create<WebSocketState>((set) => ({
         const spectatorsOnly = msg.users.filter((user) => user.isSpectator === true);
         set({ spectators: spectatorsOnly });
         set({ playerOne: msg.playerOne, playerTwo: msg.playerTwo });
+        set({ board: msg.board });
+        set({ gameState: msg.gameState });
       }
     };
 
@@ -80,6 +85,17 @@ export const useWebSocketStore = create<WebSocketState>((set) => ({
       return;
     }
     const message: ClientToServerMessage = { type: 'requestPlayerUpdate' };
+    socket.send(JSON.stringify(message));
+  },
+
+  requestBoardUpdate: (idx) => {
+    const { socket } = useWebSocketStore.getState();
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.warn('WebSocket is not connected, cannot requestBoardUpdate');
+      return;
+    }
+    const message: ClientToServerMessage = { type: 'requestBoardUpdate', index: idx };
     socket.send(JSON.stringify(message));
   },
 }));
