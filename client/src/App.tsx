@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDiscordStore } from './store/useDiscordStore';
 import { useWebSocketStore } from './store/useWebSocketStore';
-import GameBoard from './GameBoard';
+import Landing from './Landing';
 
 function App() {
   const initDiscord = useDiscordStore((s) => s.initDiscord);
@@ -14,7 +14,7 @@ function App() {
     })();
   }, []);
 
-  return <GameBoard />;
+  return <Landing />;
 }
 
 export default App;

@@ -38,6 +38,8 @@ app.post('/api/token', async (req: Request, res: Response) => {
 
 // websocket server
 const connectedUsers = new Map<WebSocket, User>();
+let playerOne: User | null = null;
+let playerTwo: User | null = null;
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({
@@ -45,12 +47,15 @@ const wss = new WebSocketServer({
   path: '/api/ws',
 });
 
-function broadcastUserList() {
+function broadcastState() {
   const usersArray: User[] = Array.from(connectedUsers.values());
-  const message: ServerToClientMessage = { type: 'spectators', users: usersArray };
+  const message: ServerToClientMessage = {
+    type: 'responseState',
+    users: usersArray,
+    playerOne: playerOne,
+    playerTwo: playerTwo,
+  };
   const messageString = JSON.stringify(message);
-
-  console.log('Broadcasting user list:', usersArray);
 
   wss.clients.forEach((client) => {
     if (client.readyState === client.OPEN) {
@@ -73,11 +78,39 @@ wss.on('connection', (ws) => {
       const msg: ClientToServerMessage = JSON.parse(data.toString());
       console.log('Received message from client:', msg);
 
-      if (msg.type === 'join') {
+      if (msg.type === 'requestConnect') {
+        msg.user.isSpectator = true;
         connectedUsers.set(ws, msg.user);
+        broadcastState();
+      }
 
-        console.log(`User joined: ${msg.user.username} (${msg.user.id})`);
-        broadcastUserList();
+      if (msg.type === 'requestPlayerUpdate') {
+        const user = connectedUsers.get(ws);
+        if (!user) {
+          console.warn('User not found in connected users');
+          return;
+        }
+
+        if (user.isSpectator) {
+          if (playerOne == null) {
+            playerOne = user;
+            user.isSpectator = false;
+          } else if (playerTwo == null) {
+            playerTwo = user;
+            user.isSpectator = false;
+          }
+        } else {
+          if (playerOne?.id === user.id) {
+            playerOne = null;
+            user.isSpectator = true;
+          }
+          if (playerTwo?.id === user.id) {
+            playerTwo = null;
+            user.isSpectator = true;
+          }
+        }
+
+        broadcastState();
       }
     } catch (err) {
       console.error('Failed to parse message', err);
@@ -87,10 +120,15 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     if (connectedUsers.has(ws)) {
       const user = connectedUsers.get(ws);
+      if (user?.id === playerOne?.id) {
+        playerOne = null;
+      } else if (user?.id === playerTwo?.id) {
+        playerTwo = null;
+      }
       connectedUsers.delete(ws);
 
       console.log(`User disconnected: ${user?.username}`);
-      broadcastUserList();
+      broadcastState();
     }
   });
 });

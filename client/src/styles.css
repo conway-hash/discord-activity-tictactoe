@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-inter: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --color-black: #000000;
+  --color-yellow: #fbed2b;
+  --color-white: #fefefe;
+  --color-lila: #d5bff2;
+  --color-violet: #bb88fd;
+}

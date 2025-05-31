@@ -1,15 +1,19 @@
 interface User {
   id: string;
   username: string;
-  avatar?: string; // Optional, can be undefined if no avatar is set
+  avatar?: string;
+  isSpectator: boolean;
 }
 
 type ServerToClientMessage =
   | { type: "info"; message: string }
-  | { type: "spectators"; users: User[] };
+  | { type: "responseState"; users: User[]; playerOne: User | null; playerTwo: User | null };
 
 type ClientToServerMessage =
-  | { type: "join"; user: User };
+  | { type: "requestConnect"; user: User }
+  | { type: "requestPlayerUpdate" };
+
+type GameState = "waiting" | "playing" | "finished";
 
 type AuthenticateResponse = {
         access_token: string;
@@ -32,4 +36,4 @@ type AuthenticateResponse = {
         };
     };
 
-export { User, ServerToClientMessage, ClientToServerMessage, AuthenticateResponse };
+export { User, ServerToClientMessage, ClientToServerMessage, AuthenticateResponse, GameState };
